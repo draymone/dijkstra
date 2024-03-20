@@ -122,3 +122,26 @@ def display_shortest_path(graph: Dict[str, Dict[str, int | float]],
         chemin = parent[sommet] + ' --> ' + chemin
         sommet = parent[sommet]
     print(f"Le chemin de {start} à {end} : {chemin}.")
+
+
+def display_shortest_path_usa(graph: Dict[str, Dict[str, int | float]],
+                              start: str,
+                              end: str,
+                              data: List[List]) -> None:
+    """ Affiche la distance minimale entre les deux sommets, et le chemin minimal.
+    """
+    # application de l'algorithme de Dijkstra sur le graphe, entre les deux sommets
+    distance, parent = dijkstra_opti(graph, start, end)
+    print(f"La distance de {capital_city(start, data)} à {capital_city(end, data)} est de longueur {distance[end]}.")
+    # affichage du chemin minimal entre les deux sommets
+    chemin = capital_city(end, data)
+    sommet = end
+    while sommet != start:
+        chemin = capital_city(parent[sommet], data) + ' --> ' + chemin
+        sommet = parent[sommet]
+    print(f"Le chemin de {start} à {end} : {chemin}.")
+
+
+def capital_city(state: str,
+                 data: List[List]) -> str:
+    return data[int(state)][2]
