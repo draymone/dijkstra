@@ -1,8 +1,6 @@
-# Fichier d'accompagnement
+# List with each state's adjacent states
 
-# Liste des états limitrophes
-
-etats_adjacents = [
+adjacent_states = [
     [23, 41, 9, 8],
     [],
     [4, 27, 43, 30],

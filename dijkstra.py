@@ -2,120 +2,128 @@ import math
 from typing import Dict, List
 
 
-def sommet_distance_min(sommets_a_visiter: List[str],
-                        distance: Dict[str, int | float]) -> str | None:
-    """ Prend en entrée un tableau de sommets et un dictionnaire de distances
-        Renvoie le sommet à distance minimale
+def lower_distance_vertex(vertices_to_visit: List[str],
+                          distance: Dict[str, int | float]) -> str | None:
+    """Picks the closest vertex.
+
+    Returns the vertex with the lower associated distance.
+
+    :param vertices_to_visit: The list of vertices
+    :param distance: The dict that associates to it's vertex his distance
+    :return: The closest vertex
     """
-    # la distance affectée à chaque sommet est infinie
-    sommet_min: str | None = None
-    distance_min: int | float = math.inf
-    # pour chaque sommet à visiter, si la distance est inférieure à la distance
-    # minimale actuelle, on met à jour les données distance_min et sommet_min
-    for sommet in sommets_a_visiter:
-        if distance[sommet] < distance_min:
-            sommet_min = sommet
-            distance_min = distance[sommet]
-    # on renvoie le sommet à distance minimale
-    return sommet_min
+    # Sets the minimal distance to infinity
+    closest_vertex: str | None = None
+    min_distance: int | float = math.inf
+    for sommet in vertices_to_visit:  # For each vertex
+        if distance[sommet] < min_distance:  # If the distance is lower than the actual distance
+            closest_vertex = sommet  # Update the closest vertex field
+            min_distance = distance[sommet]  # And the min distance field
+    return closest_vertex  # Return the closest vertex
 
 
-def dijkstra_opti(graphe: Dict[str, Dict[str, int | float]],
-                  depart: str,
-                  arrivee: str) -> (Dict[str, int | float], Dict[str, str | None]):
-    """ Version optimisée de l'algorithme de Djikstra, s'arrête dès que le chemin dmandé est trouvé. Prend en entrée une
-    liste d'adjacence (graphe), un sommet de départ et un sommet d'arrivée.
-    Renvoie deux dictionnaires :
-        - distance : la distance de chaque sommet avec le sommet de départ
-        - parent : le parent du sommet dans le chemin minimal à ce sommet
+def dijkstra_opti(graph: Dict[str, Dict[str, int | float]],
+                  start: str,
+                  end: str) -> (Dict[str, int | float], Dict[str, str | None]):
+    """Optimized dijkstra's algorithm.
+
+    Optimized dijkstra's algorithm implementation, stops when the distance between the start and end vertices is found.
+
+    :param graph: Graph's adjacence list
+    :param start: The start vertex
+    :param end: The wanted vertex
+    :return: Tuple contaning: a dictionary that associates to each vertex it's distance with the start vertex; a
+    dictionarty that associates to each vertex it's parent
     """
-    # création des dictionnaires distance et parent
+    # Creation of the dictionnaries
     distance: Dict[str, int | float] = {}
     parent: Dict[str, str | None] = {}
-    # initialisation des distances à l'infini
-    for sommet in graphe:
-        distance[sommet] = math.inf
-    # on marque le départ dans les dictionnaires distance et parent
-    distance[depart] = 0
-    parent[depart] = None
-    # on crée un tableau de sommets non sélectionnés, qui contient tous les
-    # sommets du graphe au début
-    sommets_a_visiter = [sommet for sommet in graphe]
 
-    # boucle principale de l'algorithme
-    while len(sommets_a_visiter) >= 1:
-        # récupération du sommet non visité à distance minimale
-        sommet_min = sommet_distance_min(sommets_a_visiter, distance)
-        # test de sortie de l'algorithme : si le sommet choisi est l'arrivée,
-        if sommet_min == arrivee:
-            # on renvoie les deux dictionnaires construits.
-            return distance, parent
-        # dans le cas contraire
+    # Initialisation of the distances as infinite
+    for vertex in graph:
+        distance[vertex] = math.inf
+
+    # Mark the start vertex
+    distance[start] = 0
+    parent[start] = None
+
+    vertices_to_visit = [vertex for vertex in graph]  # Create an array with the vertices that are not yet visited
+
+    # Algorithm's main loop
+    while len(vertices_to_visit) >= 1:
+        closest_vertex = lower_distance_vertex(vertices_to_visit, distance)  # Get the vertex with the lower distance
+        if closest_vertex == end:  # If the found vertex is the wanted one
+            return distance, parent  # Return
         else:
-            # on supprime le sommet choisi du tableau des sommets à visiter
-            sommets_a_visiter.remove(sommet_min)
-            # création du tableau des voisins du sommet choisi
-            voisins = [sommet for sommet in graphe[sommet_min] if sommet in sommets_a_visiter]
-            # pour chaque sommet voisin non visité
-            for voisin in voisins:
-                # on calcule la distance totale au voisin
-                distance_totale = distance[sommet_min] + graphe[sommet_min][voisin]
-                # si la distance calculée est inférieure à la distance actuelle,
-                # on met à jour les données distance et parent
-                if distance_totale < distance[voisin]:
-                    parent[voisin] = sommet_min
-                    distance[voisin] = distance_totale
+            vertices_to_visit.remove(closest_vertex)  # Remove the chosen vertex from the array
+            neighbors = [vertex for vertex in graph[closest_vertex]  # Get the vertex's neighbors
+                         if vertex in vertices_to_visit]  # If they have not yet been visited
+            for neighbor in neighbors:  # For each non visited neighbor
+                # Process the total distance
+                total_distance = distance[closest_vertex] + graph[closest_vertex][neighbor]
+                if total_distance < distance[neighbor]:  # If the distance is lower than the actual one
+                    # Update the dictionaries
+                    parent[neighbor] = closest_vertex
+                    distance[neighbor] = total_distance
 
 
 def dijkstra(graph: Dict[str, Dict[str, int | float]],
              start: str) -> (Dict[str, int | float], Dict[str, str | None]):
-    """ Prend en entrée une liste d'adjacence (graphe) et un sommet de départ.
-    Renvoie deux dictionnaires :
-        - distance : la distance de chaque sommet avec le sommet de départ
-        - parent : le parent du sommet dans le chemin minimal à ce sommet
+    """Dijkstra's algorithm.
+
+    Dijkstra's algorithm implementation.
+
+    :param graph: Graph's adjacence list
+    :param start: The start vertex
+    :return: Tuple contaning: a dictionary that associates to each vertex it's distance with the start vertex; a
+    dictionarty that associates to each vertex it's parent
     """
-    # création des dictionnaires distance et parent
+    # Creation of the dictionnaries
     distance: Dict[str, int | float] = {}
     parent: Dict[str, str | None] = {}
-    # initialisation des distances à l'infini
-    for sommet in graph:
-        distance[sommet] = math.inf
-    # on marque le départ dans les dictionnaires distance et parent
+
+    # Initialisation of the distances as infinite
+    for vertex in graph:
+        distance[vertex] = math.inf
+
+    # Mark the start vertex
     distance[start] = 0
     parent[start] = None
-    # on crée un tableau de sommets non sélectionnés, qui contient tous les
-    # sommets du graphe au début
-    sommets_a_visiter = [sommet for sommet in graph]
 
-    # boucle principale de l'algorithme
-    while len(sommets_a_visiter) >= 1:
-        # récupération du sommet non visité à distance minimale
-        sommet_min = sommet_distance_min(sommets_a_visiter, distance)
-        # on supprime le sommet choisi du tableau des sommets à visiter
-        sommets_a_visiter.remove(sommet_min)
+    vertices_to_visit = [sommet for sommet in graph]  # Create an array with the vertices that are not yet visited
+
+    # Algorithm's main loop
+    while len(vertices_to_visit) >= 1:
+        closest_vertex = lower_distance_vertex(vertices_to_visit, distance)  # Get the vertex with the lower distance
+        vertices_to_visit.remove(closest_vertex)  # Remove the chosen vertex from the array
         # création du tableau des voisins du sommet choisi
-        voisins = [sommet for sommet in graph[sommet_min] if sommet in sommets_a_visiter]
-        # pour chaque sommet voisin non visité
-        for voisin in voisins:
-            # on calcule la distance totale au voisin
-            distance_totale = distance[sommet_min] + graph[sommet_min][voisin]
-            # si la distance calculée est inférieure à la distance actuelle,
-            # on met à jour les données distance et parent
-            if distance_totale < distance[voisin]:
-                parent[voisin] = sommet_min
-                distance[voisin] = distance_totale
-    return distance, parent
+        neighbors = [sommet for sommet in graph[closest_vertex]  # Get the vertex's neighbors
+                     if sommet in vertices_to_visit]  # If they have not yet been visited
+        for neighbor in neighbors:  # For each non visited neighbor
+            # Process the total distance
+            total_distance = distance[closest_vertex] + graph[closest_vertex][neighbor]
+            if total_distance < distance[neighbor]:  # If the distance is lower than the actual one
+                # Update the dictionaries
+                parent[neighbor] = closest_vertex
+                distance[neighbor] = total_distance
+    return distance, parent  # Return
 
 
 def display_shortest_path(graph: Dict[str, Dict[str, int | float]],
                           start: str,
                           end: str) -> None:
-    """ Affiche la distance minimale entre les deux sommets, et le chemin minimal.
+    """Display the lower distance between two vertices
+
+    Print the lower distance between two vertices in the console using dijkstra's algorithm
+
+    :param graph: The adjacence list
+    :param start: The start vertex
+    :param end: The end vertex
+    :return:
     """
-    # application de l'algorithme de Dijkstra sur le graphe, entre les deux sommets
-    distance, parent = dijkstra_opti(graph, start, end)
-    print(f"La distance de {start} à {end} est de longueur {distance[end]}.")
-    # affichage du chemin minimal entre les deux sommets
+    distance, parent = dijkstra_opti(graph, start, end)  # Dijkstra's algorithm
+    print(f"La distance de {start} à {end} est de longueur {distance[end]}.")  # Print the distance
+    # Print the path
     chemin = end
     sommet = end
     while sommet != start:
@@ -128,12 +136,21 @@ def display_shortest_path_usa(graph: Dict[str, Dict[str, int | float]],
                               start: str,
                               end: str,
                               data: List[List]) -> None:
-    """ Affiche la distance minimale entre les deux sommets, et le chemin minimal.
+    """Display the lower distance between two vertices
+
+    Print the lower distance between two vertices in the console using dijkstra's algorithm
+
+    :param graph: The adjacence list
+    :param start: The start vertex
+    :param end: The end vertex
+    :param data: The list that contains states data (abbreviation, name, capital city, coordinates)
+    :return:
     """
-    # application de l'algorithme de Dijkstra sur le graphe, entre les deux sommets
-    distance, parent = dijkstra_opti(graph, start, end)
+    distance, parent = dijkstra_opti(graph, start, end)  # Dijkstra's algorithm
+    # Print the distance
     print(f"La distance de {capital_city(start, data)} à {capital_city(end, data)} est de longueur {distance[end]}.")
-    # affichage du chemin minimal entre les deux sommets
+
+    # Print the path
     chemin = capital_city(end, data)
     sommet = end
     while sommet != start:
@@ -144,4 +161,10 @@ def display_shortest_path_usa(graph: Dict[str, Dict[str, int | float]],
 
 def capital_city(state: str,
                  data: List[List]) -> str:
+    """Get a state's capital city
+
+    :param state: State's index
+    :param data: The list that contains states data (abbreviation, name, capital city, coordinates)
+    :return: State's capital city
+    """
     return data[int(state)][2]

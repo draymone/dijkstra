@@ -1,6 +1,6 @@
-import dijkstra
-import usa_data
 from typing import Dict
+
+import dijkstra
 
 if __name__ == '__main__':
     # Graphs for testing the algorithm

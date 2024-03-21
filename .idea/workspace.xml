@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="70bfd6de-2482-461e-b098-64b2bdd99818" name="Changes" comment="">
+    <list default="true" id="70bfd6de-2482-461e-b098-64b2bdd99818" name="Changes" comment="Initial commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dijkstra.py" beforeDir="false" afterPath="$PROJECT_DIR$/dijkstra.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usa_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/usa_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/walk_usa.py" beforeDir="false" afterPath="$PROJECT_DIR$/walk_usa.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +27,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -55,7 +58,7 @@
       <recent name="C:\Users\hp\PycharmProjects\dijkstra" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.walk_usa">
+  <component name="RunManager" selected="Python.main">
     <configuration name="dijkstra" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="dijkstra" />
       <option name="ENV_FILES" value="" />
@@ -146,9 +149,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.walk_usa" />
         <item itemvalue="Python.dijkstra" />
-        <item itemvalue="Python.main" />
         <item itemvalue="Python.types" />
       </list>
     </recent_temporary>
