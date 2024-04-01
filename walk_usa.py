@@ -68,3 +68,4 @@ if __name__ == '__main__':
     statesData: List[List] = read_csv('states.csv')
     adjacenceList: Dict[str, Dict[str, float]] = make_adjacence_list(usa_data.adjacent_states, statesData)
     dijkstra.display_shortest_path_usa(adjacenceList, "18", "30", statesData)
+    print(dijkstra.shortest_path_usa(adjacenceList, "18", "30"))

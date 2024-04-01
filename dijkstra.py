@@ -1,5 +1,5 @@
 import math
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 
 def lower_distance_vertex(vertices_to_visit: List[str],
@@ -146,25 +146,48 @@ def display_shortest_path_usa(graph: Dict[str, Dict[str, int | float]],
     :param data: The list that contains states data (abbreviation, name, capital city, coordinates)
     :return:
     """
+
+    def capital_city(state: str) -> str:
+        """Get a state's capital city
+
+        :param state: State's index
+        :return: State's capital city
+        """
+        return data[int(state)][2]
+
     distance, parent = dijkstra_opti(graph, start, end)  # Dijkstra's algorithm
     # Print the distance
-    print(f"La distance de {capital_city(start, data)} à {capital_city(end, data)} est de longueur {distance[end]}.")
+    print(f"La distance de {capital_city(start)} à {capital_city(end)} est de longueur {distance[end]}.")
 
     # Print the path
-    chemin = capital_city(end, data)
+    chemin = capital_city(end)
     sommet = end
     while sommet != start:
-        chemin = capital_city(parent[sommet], data) + ' --> ' + chemin
+        chemin = capital_city(parent[sommet]) + ' --> ' + chemin
         sommet = parent[sommet]
-    print(f"Le chemin de {start} à {end} : {chemin}.")
+    print(f"Le chemin de {capital_city(start)} à {capital_city(end)} : {chemin}.")
 
 
-def capital_city(state: str,
-                 data: List[List]) -> str:
-    """Get a state's capital city
+def shortest_path_usa(graph: Dict[str, Dict[str, int | float]],
+                      start: str,
+                      end: str) -> Tuple[float, List[int]]:
+    """Return the lower distance between two states and the shortest path
 
-    :param state: State's index
-    :param data: The list that contains states data (abbreviation, name, capital city, coordinates)
-    :return: State's capital city
+    Return the lower distance between two states and the shortest path using dijkstra's algorithm
+
+    :param graph: The adjacence list
+    :param start: The start vertex
+    :param end: The end vertex
+    :return (float, int[]): Tuple containing: the distance between the two states, the shortest path between them
     """
-    return data[int(state)][2]
+    distance, parent = dijkstra_opti(graph, start, end)  # Dijkstra's algorithm
+
+    # Get the path
+    path = [int(end)]
+    vertex = end
+    while vertex != start:
+        path.append(int(parent[vertex]))
+        vertex = parent[vertex]
+
+    # Return
+    return distance[end], path
